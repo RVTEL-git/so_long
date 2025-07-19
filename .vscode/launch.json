@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+	
+
+    {
+      "name": "Déboguer avec GDB",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/so_long",
+      "args": ["maps_so_long/maps_err/wrong_chars5.ber"],                 // Arguments à passer au programme
+      "stopAtEntry": true,        // S'arrêter à l'entrée de main
+      "cwd": "${workspaceFolder}",// Répertoire de travail
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",            // Mode de débogueur
+      "setupCommands": [
+        {
+          "description": "Activer le pretty printing",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

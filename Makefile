@@ -6,72 +6,53 @@
 #    By: barmarti <barmarti@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/05 16:32:33 by barmarti          #+#    #+#              #
-#    Updated: 2025/07/19 19:31:01 by barmarti         ###   ########.fr        #
+#    Updated: 2025/07/21 13:58:37 by barmarti         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# **************************************************************************** #
-#                                  VARIABLES                                   #
-# **************************************************************************** #
+NAME := so_long
+CC := cc
+CFLAGS := -Wall -Wextra -Werror -g
 
-NAME        = so_long
-CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g
-RM          = rm -f
-MKDIR       = mkdir -p
 
-# ----------------------------------------------------------------------------- #
-# Dossiers
-# ----------------------------------------------------------------------------- #
+SRC_DIRS := . handle_input init_data manage_error map_init map_init/flood_fill
+OBJ_DIR := obj
+INCLUDES := -Iinclude -Iinclude/libft -Iinclude/libft/ft_printf -Iinclude/libft/ft_printf/src -Iinclude/libft/ft_printf/conversions
 
-SRC_DIRS    = . map_init map_init/flood_fill manage_error init_data handle_input
-OBJ_DIR     = obj
-LIBFT_DIR   = include/libft
-MLX_DIR     = include/minilibx-linux
+MLX_DIR := include/minilibx-linux
+MLX_LIB := $(MLX_DIR)/libmlx.a
+MLX_FLAGS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
-INCLUDE_DIRS = include $(LIBFT_DIR) $(LIBFT_DIR)/ft_printf $(LIBFT_DIR)/ft_printf/src $(LIBFT_DIR)/ft_printf/conversions
-INCLUDES    = $(addprefix -I, $(INCLUDE_DIRS))
+LIBFT_DIR := include/libft
+LIBFT := $(LIBFT_DIR)/libft.a
 
-LIBFT       = $(LIBFT_DIR)/libft.a
-MLX_FLAGS   = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
-# ----------------------------------------------------------------------------- #
-# Fichiers sources
-# ----------------------------------------------------------------------------- #
+SRCS := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+OBJS := $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
-SRC         = $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
-OBJ         = $(SRC:%.c=$(OBJ_DIR)/%.o)
-
-# **************************************************************************** #
-#                                  REGLES                                       #
-# **************************************************************************** #
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $@ $(OBJ) $(LIBFT) $(MLX_FLAGS)
+$(NAME): $(MLX_LIB) $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
-$(OBJ_DIR)/%.o: %.c | $(INC)
-	@$(MKDIR) $(dir $@)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# **************************************************************************** #
-#                                 LIBFT                                         #
-# **************************************************************************** #
+$(MLX_LIB):
+	$(MAKE) -C $(MLX_DIR)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
-# **************************************************************************** #
-#                                CLEANING                                       #
-# **************************************************************************** #
-
 clean:
-	$(RM) $(OBJ)
+	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all

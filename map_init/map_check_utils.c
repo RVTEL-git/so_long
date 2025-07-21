@@ -6,11 +6,29 @@
 /*   By: barmarti <barmarti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 17:22:24 by barmarti          #+#    #+#             */
-/*   Updated: 2025/07/19 20:02:37 by barmarti         ###   ########.fr       */
+/*   Updated: 2025/07/21 13:26:31 by barmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
+
+bool	check_ext(char *map)
+{
+	size_t	len;
+
+	len = ft_strlen(map);
+	if (len <= 4)
+	{
+		ft_putstr_fd("Error\nWrong extention name\n", 2);
+		return (False);
+	}
+	if (ft_strncmp(&map[len - 4], ".ber", 4) != 0)
+	{
+		ft_putstr_fd("Error\nWrong extention name\n", 2);
+		return (False);
+	}
+	return (True);
+}
 
 bool	check_len(t_game *g)
 {
@@ -38,18 +56,6 @@ bool	check_len(t_game *g)
 	return (True);
 }
 
-bool	check_ext(char *map)
-{
-	size_t	len;
-
-	len = ft_strlen(map);
-	if (ft_strncmp(&map[len - 4], ".ber", 4) != 0)
-	{
-		ft_putstr_fd("Error\nWrong extention name\n", 2);
-		return (False);
-	}
-	return (True);
-}
 
 bool	check_char(t_game *m, char c, int y, int x)
 {

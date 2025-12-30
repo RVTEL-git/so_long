@@ -26,7 +26,7 @@ typedef struct s_point
 {
 	int	x;
 	int	y;
-}t_point;
+}	t_point;
 
 typedef struct s_game
 {
@@ -38,7 +38,7 @@ typedef struct s_game
 	t_point		*pl_pos;
 	t_point		*ext_pos;
 	t_point		*size;
-}t_game;
+}	t_game;
 
 typedef struct s_mlx_img
 {
@@ -56,14 +56,14 @@ typedef struct s_mlx_img
 	int				cons_frame;
 	struct timeval	last_anim;
 	t_game			*game;
-}t_mlx_img;
+}	t_mlx_img;
 
 typedef struct s_mlx_data
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
 	t_mlx_img	*img_ptr;
-}t_mlx_data;
+}	t_mlx_data;
 
 void		change_data(t_game *g, int new_y, int new_x);
 void		print_image(t_mlx_data *d);

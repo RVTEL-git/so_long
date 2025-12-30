@@ -22,10 +22,10 @@ void	put_image(t_mlx_data *d, char c, int x, int y)
 			d->img_ptr->floor, x * 64, y * 64);
 	else if (c == 'P')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
-			d->img_ptr->player, x * 64, y * 64);
+			d->img_ptr->player[d->img_ptr->player_frame], x * 64, y * 64);
 	else if (c == 'C')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
-			d->img_ptr->cons, x * 64, y * 64);
+			d->img_ptr->cons[d->img_ptr->cons_frame], x * 64, y * 64);
 	else if (c == 'E')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
 			d->img_ptr->exit, x * 64, y * 64);
@@ -40,17 +40,27 @@ void	init_image(t_mlx_data *data)
 			"tiles_xpm/0.xpm", &w, &h);
 	data->img_ptr->wall = mlx_xpm_file_to_image(data->mlx_ptr,
 			"tiles_xpm/1.xpm", &w, &h);
-	data->img_ptr->player = mlx_xpm_file_to_image(data->mlx_ptr,
+	data->img_ptr->player[0] = mlx_xpm_file_to_image(data->mlx_ptr,
 			"tiles_xpm/P.xpm", &w, &h);
+	data->img_ptr->player[1] = mlx_xpm_file_to_image(data->mlx_ptr,
+			"tiles_xpm/P_1.xpm", &w, &h);
+	data->img_ptr->player[2] = mlx_xpm_file_to_image(data->mlx_ptr,
+			"tiles_xpm/P_2.xpm", &w, &h);
 	data->img_ptr->exit = mlx_xpm_file_to_image(data->mlx_ptr,
 			"tiles_xpm/E.xpm", &w, &h);
-	data->img_ptr->cons = mlx_xpm_file_to_image(data->mlx_ptr,
+	data->img_ptr->cons[0] = mlx_xpm_file_to_image(data->mlx_ptr,
 			"tiles_xpm/C.xpm", &w, &h);
-	if (!data->img_ptr->floor || !data->img_ptr->wall || !data->img_ptr->player
-		|| !data->img_ptr->exit || !data->img_ptr->cons)
-	{
+	data->img_ptr->cons[1] = mlx_xpm_file_to_image(data->mlx_ptr,
+			"tiles_xpm/C_1.xpm", &w, &h);
+	data->img_ptr->cons[2] = mlx_xpm_file_to_image(data->mlx_ptr,
+			"tiles_xpm/C_2.xpm", &w, &h);
+	data->img_ptr->player_frame = 0;
+	data->img_ptr->cons_frame = 0;
+	gettimeofday(&data->img_ptr->last_anim, NULL);
+	if (!data->img_ptr->floor || !data->img_ptr->wall
+		|| !data->img_ptr->player[0] || !data->img_ptr->exit
+		|| !data->img_ptr->cons[0])
 		exit_game(data, 1);
-	}
 }
 
 void	print_image(t_mlx_data *d)
@@ -102,6 +112,7 @@ bool	init_window(t_mlx_data *data)
 	print_image(data);
 	mlx_hook(data->win_ptr, 17, 0, end_game, data);
 	mlx_key_hook(data->win_ptr, &handle_input, data);
+	mlx_loop_hook(data->mlx_ptr, &animate_sprites, data);
 	mlx_loop(data->mlx_ptr);
 	return (True);
 }

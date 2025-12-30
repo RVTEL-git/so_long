@@ -56,7 +56,6 @@ bool	check_len(t_game *g)
 	return (True);
 }
 
-
 bool	check_char(t_game *m, char c, int y, int x)
 {
 	if (c == 'P')

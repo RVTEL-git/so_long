@@ -1,0 +1,5 @@
+*.o
+*.a
+obj/
+so_long
+include/minilibx-linux/

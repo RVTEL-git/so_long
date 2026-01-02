@@ -24,14 +24,21 @@ void	free_map(t_game *g)
 
 void	destroy_image(t_mlx_data *d)
 {
+	int	i;
+
 	if (d->img_ptr->floor)
 		mlx_destroy_image(d->mlx_ptr, d->img_ptr->floor);
 	if (d->img_ptr->wall)
 		mlx_destroy_image(d->mlx_ptr, d->img_ptr->wall);
-	if (d->img_ptr->cons)
-		mlx_destroy_image(d->mlx_ptr, d->img_ptr->cons);
-	if (d->img_ptr->player)
-		mlx_destroy_image(d->mlx_ptr, d->img_ptr->player);
+	i = 0;
+	while (i < ANIM_FRAMES)
+	{
+		if (d->img_ptr->cons[i])
+			mlx_destroy_image(d->mlx_ptr, d->img_ptr->cons[i]);
+		if (d->img_ptr->player[i])
+			mlx_destroy_image(d->mlx_ptr, d->img_ptr->player[i]);
+		i++;
+	}
 	if (d->img_ptr->exit)
 		mlx_destroy_image(d->mlx_ptr, d->img_ptr->exit);
 }

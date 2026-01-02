@@ -55,7 +55,7 @@ void	init_struct_null(t_game *m)
 	m->size->y = 0;
 }
 
-bool	many_maps(fd)
+bool	many_maps(int fd)
 {
 	char	*buff_temp;
 

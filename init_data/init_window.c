@@ -22,35 +22,13 @@ void	put_image(t_mlx_data *d, char c, int x, int y)
 			d->img_ptr->floor, x * 64, y * 64);
 	else if (c == 'P')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
-			d->img_ptr->player, x * 64, y * 64);
+			d->img_ptr->player[d->img_ptr->player_frame], x * 64, y * 64);
 	else if (c == 'C')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
-			d->img_ptr->cons, x * 64, y * 64);
+			d->img_ptr->cons[d->img_ptr->cons_frame], x * 64, y * 64);
 	else if (c == 'E')
 		mlx_put_image_to_window(d->mlx_ptr, d->win_ptr,
 			d->img_ptr->exit, x * 64, y * 64);
-}
-
-void	init_image(t_mlx_data *data)
-{
-	int	w;
-	int	h;
-
-	data->img_ptr->floor = mlx_xpm_file_to_image(data->mlx_ptr,
-			"tiles_xpm/0.xpm", &w, &h);
-	data->img_ptr->wall = mlx_xpm_file_to_image(data->mlx_ptr,
-			"tiles_xpm/1.xpm", &w, &h);
-	data->img_ptr->player = mlx_xpm_file_to_image(data->mlx_ptr,
-			"tiles_xpm/P.xpm", &w, &h);
-	data->img_ptr->exit = mlx_xpm_file_to_image(data->mlx_ptr,
-			"tiles_xpm/E.xpm", &w, &h);
-	data->img_ptr->cons = mlx_xpm_file_to_image(data->mlx_ptr,
-			"tiles_xpm/C.xpm", &w, &h);
-	if (!data->img_ptr->floor || !data->img_ptr->wall || !data->img_ptr->player
-		|| !data->img_ptr->exit || !data->img_ptr->cons)
-	{
-		exit_game(data, 1);
-	}
 }
 
 void	print_image(t_mlx_data *d)
@@ -102,6 +80,7 @@ bool	init_window(t_mlx_data *data)
 	print_image(data);
 	mlx_hook(data->win_ptr, 17, 0, end_game, data);
 	mlx_key_hook(data->win_ptr, &handle_input, data);
+	mlx_loop_hook(data->mlx_ptr, &animate_sprites, data);
 	mlx_loop(data->mlx_ptr);
 	return (True);
 }

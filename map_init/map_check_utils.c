@@ -33,7 +33,6 @@ bool	check_ext(char *map)
 bool	check_len(t_game *g)
 {
 	int		time;
-	size_t	index;
 	size_t	len;
 
 	time = g->size->y - 1;
@@ -43,7 +42,6 @@ bool	check_len(t_game *g)
 		ft_putstr_fd("Error\nThe map is too small\n", 2);
 		return (False);
 	}
-	index = 0;
 	while (time)
 	{
 		if (ft_strlen(g->map[time]) != len)

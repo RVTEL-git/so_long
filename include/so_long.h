@@ -17,12 +17,16 @@
 # include "minilibx-linux/mlx_int.h"
 # include "libft/libft.h"
 # include <stdbool.h>
+# include <sys/time.h>
+
+# define ANIM_FRAMES 3
+# define ANIM_SPEED 200000
 
 typedef struct s_point
 {
 	int	x;
 	int	y;
-}t_point;
+}	t_point;
 
 typedef struct s_game
 {
@@ -34,29 +38,32 @@ typedef struct s_game
 	t_point		*pl_pos;
 	t_point		*ext_pos;
 	t_point		*size;
-}t_game;
+}	t_game;
 
 typedef struct s_mlx_img
 {
-	void	*img_ptr;
-	char	*img_pixel_ptr;
-	int		bits_per_pixel;
-	int		endian;
-	int		line_len;
-	void	*player;
-	void	*exit;
-	void	*cons;
-	void	*wall;
-	void	*floor;
-	t_game	*game;
-}t_mlx_img;
+	void			*img_ptr;
+	char			*img_pixel_ptr;
+	int				bits_per_pixel;
+	int				endian;
+	int				line_len;
+	void			*player[ANIM_FRAMES];
+	void			*exit;
+	void			*cons[ANIM_FRAMES];
+	void			*wall;
+	void			*floor;
+	int				player_frame;
+	int				cons_frame;
+	struct timeval	last_anim;
+	t_game			*game;
+}	t_mlx_img;
 
 typedef struct s_mlx_data
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
 	t_mlx_img	*img_ptr;
-}t_mlx_data;
+}	t_mlx_data;
 
 void		change_data(t_game *g, int new_y, int new_x);
 void		print_image(t_mlx_data *d);
@@ -91,5 +98,6 @@ void		exit_game(t_mlx_data *data, int exit_code);
 int			end_game(t_mlx_data *data);
 int			handle_input(int keysym, t_mlx_data *data);
 void		destroy_image(t_mlx_data *d);
+int			animate_sprites(t_mlx_data *data);
 
 #endif
